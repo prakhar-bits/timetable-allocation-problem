@@ -110,15 +110,7 @@ int main()
         }
         
     }
-
-     for(auto pr : prof_courses)
-    {
-        cout<<pr.first<<endl;
-        for (int  i = 0; i < pr.second.size() ; i++)
-        {
-            cout<<pr.second[i]<<" ";
-        }cout<<endl;        
-    }cout<<endl;
+    
     // PART - 2 : THE MAN ALGORITHM BEGINS 
 
 
