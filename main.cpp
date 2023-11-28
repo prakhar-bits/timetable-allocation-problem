@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-map<int,vector<int>> master; 
+map<int,vector<int>> master; //key - "new" course id; value - vector of profs
 
 int main()
 {
@@ -115,20 +115,20 @@ int main()
 
     map<int, int> new_cid; // key is old course id and value is revised course id, order of new cid -> fdcdc,hdcdc,fdelec,hdelec
     map<int,int > rev_new_cid; //key is revised course id and value is old course id,
-    int newid_allocator =  1;
-    int column_num = 0;
-    int count = 0;
+    int newid_allocator =  1; //value of current new id to be alloted 
+    int column_num = 0;//column currently in use of (say fdcdc map)
+    int count = 0;//allows to traverse map and breaks once all elements are traveresed(all vectors and all elements in them)
     while(count < prof_fd_cdc.size())
     {
         count = 0;
         for(auto it = prof_fd_cdc.begin() ; it != prof_fd_cdc.end(); it++ )
         {
-            if( (*it).second.size() <= column_num) count++;
+            if( (*it).second.size() <= column_num) count++; //count increments seeing a vector size less than column num which ensures complete traversal of that vector 
             else
             {
-                if(new_cid[(*it).second[column_num]] == 0)
+                if(new_cid[(*it).second[column_num]] == 0) //checks if id has been alloted previously
                 {
-                    new_cid[(*it).second[column_num]] = newid_allocator;
+                    new_cid[(*it).second[column_num]] = newid_allocator; //makes newid
                     rev_new_cid[newid_allocator] = (*it).second[column_num];
                     newid_allocator++;
                 }
@@ -136,6 +136,7 @@ int main()
         }
         column_num++;
     }
+    //same as above for rest
     column_num = 0;
     count = 0;
     while(count < prof_hd_cdc.size())
@@ -201,7 +202,7 @@ int main()
     // PART - 2 : THE MAN ALGORITHM BEGINS 
 
     // init master map
-
+    //using above traversal route but updating master at end
     column_num = 0;
     count = 0;
     while(count < prof_fd_cdc.size())
@@ -211,7 +212,8 @@ int main()
         {
             if( (*it).second.size() <= column_num) count++;
             else
-            {
+            {//master updated here to have key as new course id and value as a vector of profs who can take that course
+                //also priority order of the profs are maintained due to new course id
                 master[new_cid[(*it).second[column_num]]].push_back((*it).first); 
             }
         }
