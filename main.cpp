@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+map<int,vector<int>> master; 
+
 int main()
 {
     // PART 1 : THE STORING OF INPUT FILES INTO MANY SMALL USEFUL PIECES
@@ -19,12 +21,12 @@ int main()
     cin>> num_of_profs;
     cin >> ws; //skips first input line
 
-    map<int,double> prof_potential; // max courses taken by prof first element prof id second potential
+    map<int,double> prof_potential; // max courses can be taken by prof, first element prof id second potential
     map<int,string> prof_id; //this stores id of prof as key and stored prof name as value
     map<string,int> rev_prof_id; // this is used when i want to find id of a prof
     map<int,string> course_id; //init after the master input for loop 
     map<string,int> rev_course_id; // used when i want id of a course 
-    set<string> courses; //to find unique courses
+    set<string> courses; //to find unique total courses offered 
 
     map<int,vector<int>> prof_courses;// key of map is prof id, value is all the courses(id) prof take
     map<int,vector<int>> prof_fd_cdc; // key of map is prof id , vector<int> is vector of course id offered by prof
@@ -110,8 +112,157 @@ int main()
         }
         
     }
+
+    map<int, int> new_cid; // key is old course id and value is revised course id, order of new cid -> fdcdc,hdcdc,fdelec,hdelec
+    map<int,int > rev_new_cid; //key is revised course id and value is old course id,
+    int newid_allocator =  1;
+    int column_num = 0;
+    int count = 0;
+    while(count < prof_fd_cdc.size())
+    {
+        count = 0;
+        for(auto it = prof_fd_cdc.begin() ; it != prof_fd_cdc.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                if(new_cid[(*it).second[column_num]] == 0)
+                {
+                    new_cid[(*it).second[column_num]] = newid_allocator;
+                    rev_new_cid[newid_allocator] = (*it).second[column_num];
+                    newid_allocator++;
+                }
+            }
+        }
+        column_num++;
+    }
+    column_num = 0;
+    count = 0;
+    while(count < prof_hd_cdc.size())
+    {
+        count = 0;
+        for(auto it = prof_hd_cdc.begin() ; it != prof_hd_cdc.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                if(new_cid[(*it).second[column_num]] == 0)
+                {
+                    new_cid[(*it).second[column_num]] = newid_allocator;
+                    rev_new_cid[newid_allocator] = (*it).second[column_num];
+                    newid_allocator++;
+                }
+            }
+        }
+        column_num++;
+    }
+    column_num = 0;
+    count = 0;
+    while(count < prof_fd_elec.size())
+    {
+        count = 0;
+        for(auto it = prof_fd_elec.begin() ; it != prof_fd_elec.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                if(new_cid[(*it).second[column_num]] == 0)
+                {
+                    new_cid[(*it).second[column_num]] = newid_allocator;
+                    rev_new_cid[newid_allocator] = (*it).second[column_num];
+                    newid_allocator++;
+                }
+            }
+        }
+        column_num++;
+    }
+    column_num = 0;
+    count = 0;
+    while(count < prof_hd_elec.size())
+    {
+        count = 0;
+        for(auto it = prof_hd_elec.begin() ; it != prof_hd_elec.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                if(new_cid[(*it).second[column_num]] == 0)
+                {
+                    new_cid[(*it).second[column_num]] = newid_allocator;
+                    rev_new_cid[newid_allocator] = (*it).second[column_num];
+                    newid_allocator++;
+                }
+            }
+        }
+        column_num++;
+    }
+
     
     // PART - 2 : THE MAN ALGORITHM BEGINS 
+
+    // init master map
+
+    column_num = 0;
+    count = 0;
+    while(count < prof_fd_cdc.size())
+    {
+        count = 0;
+        for(auto it = prof_fd_cdc.begin() ; it != prof_fd_cdc.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                master[new_cid[(*it).second[column_num]]].push_back((*it).first); 
+            }
+        }
+        column_num++;
+    }
+    column_num = 0;
+    count = 0;
+    while(count < prof_hd_cdc.size())
+    {
+        count = 0;
+        for(auto it = prof_hd_cdc.begin() ; it != prof_hd_cdc.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                master[new_cid[(*it).second[column_num]]].push_back((*it).first); 
+            }
+        }
+        column_num++;
+    }
+    column_num = 0;
+    count = 0;
+    while(count < prof_fd_elec.size())
+    {
+        count = 0;
+        for(auto it = prof_fd_elec.begin() ; it != prof_fd_elec.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                master[new_cid[(*it).second[column_num]]].push_back((*it).first); 
+            }
+        }
+        column_num++;
+    }
+    column_num = 0;
+    count = 0;
+    while(count < prof_hd_elec.size())
+    {
+        count = 0;
+        for(auto it = prof_hd_elec.begin() ; it != prof_hd_elec.end(); it++ )
+        {
+            if( (*it).second.size() <= column_num) count++;
+            else
+            {
+                master[new_cid[(*it).second[column_num]]].push_back((*it).first); 
+            }
+        }
+        column_num++;
+    }
+
 
 
 
