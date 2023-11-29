@@ -2,9 +2,186 @@
 using namespace std;
 
 map<int,vector<int>> master; //key - "new" course id; value - vector of profs
+map<int,vector<int> > prof_assignment; //key is prof id; value - vector of course id //current allotments at each point of time
+set<int> not_assign_pid; //set of profs who cannot be assigned that particular course due to a clash
+map<int,double> prof_potential; // max courses can be taken by prof, first element prof id second potential
+set<int> not_assign_cid;
+
+int assign(int cid,int flag)
+{
+    int firsthalf_profid = -1;
+
+    if (flag==0)
+    { 
+        for (int  i = 0; i < master[cid].size(); i++)
+        {
+            int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
+            if(prof_potential[prof_id] >=0.5 && not_assign_pid.find(prof_id) == not_assign_pid.end())
+            {
+                prof_potential[prof_id] -=0.5;
+                prof_assignment[prof_id].push_back(cid);
+                // cout << prof_id << "   " << cid << endl;
+                return 1; 
+            }
+        }
+    }    
+    if(flag == 1)
+    {
+        
+        for (int  i = 0; i < master[cid].size(); i++)
+        {
+            
+            int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
+            
+            if(prof_potential[prof_id] >=0.5 && not_assign_pid.find(prof_id) == not_assign_pid.end())
+            {
+                prof_potential[prof_id] -=0.5;
+                prof_assignment[prof_id].push_back(cid);
+                // cout << prof_id << "   " << cid << endl;
+                flag = 0;
+                firsthalf_profid = prof_id;
+                break;
+            }
+        }
+        if(flag == 0) 
+        {
+            for (int  i = 0; i < master[cid].size(); i++)
+            {
+                int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
+                if(prof_potential[prof_id] >=0.5 && not_assign_pid.find(prof_id) == not_assign_pid.end())
+                {
+                    prof_potential[prof_id] -=0.5;
+                    prof_assignment[prof_id].push_back(cid);
+                    // cout << prof_id << "   " << cid << endl;
+                    return 1;
+                }
+            }
+        }
+    }
+
+    //  RECURSIVE CALL TO ASSIGN
+    if(flag == 0)
+    {
+        not_assign_cid.insert(cid);
+        for (int  i = 0; i < master[cid].size(); i++)
+        {
+            int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
+
+            if(not_assign_pid.find(prof_id) == not_assign_pid.end()) //does not go into recursion for already rec ursed profs in not_assign_pid
+            {
+                for (int  i = 0; i < prof_assignment[prof_id].size(); i++)
+                {
+                    if(not_assign_cid.find(prof_assignment[prof_id][i]) == not_assign_cid.end())
+                    {
+                        not_assign_pid.insert(prof_id);
+                        int is_assigned = assign(prof_assignment[prof_id][i] ,0);
+                        not_assign_pid.erase(not_assign_pid.find(prof_id));
+                        if(is_assigned == 1)
+                        {
+                            prof_assignment[prof_id].push_back(cid);
+                            // cout << prof_id << "   " << cid << endl;
+                            prof_assignment[prof_id].erase(prof_assignment[prof_id].begin()+i);
+                            not_assign_cid.erase(not_assign_cid.find(cid));
+                            return 1;
+                        }
+                    }
+                }
+            }
+            
+        }
+        not_assign_cid.erase(not_assign_cid.find(cid));
+        if(firsthalf_profid!=-1)
+        {
+            prof_assignment[firsthalf_profid].erase(prof_assignment[firsthalf_profid].end()-1);
+        }
+    }
+    if(flag == 1)
+    {
+        double amount_course_assigned=0;
+        
+
+        not_assign_cid.insert(cid);
+        for (int  i = 0; i < master[cid].size(); i++)
+        {
+            int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
+
+            if(not_assign_pid.find(prof_id) == not_assign_pid.end()) //does not go into recursion for already rec ursed profs in not_assign_pid
+            {
+                for (int  i = 0; i < prof_assignment[prof_id].size(); i++)
+                {
+                    if(not_assign_cid.find(prof_assignment[prof_id][i]) == not_assign_cid.end())
+                    {
+                        not_assign_pid.insert(prof_id);
+                        int is_assigned = assign(prof_assignment[prof_id][i] ,0);
+                        not_assign_pid.erase(not_assign_pid.find(prof_id));
+                        if(is_assigned == 1)
+                        {
+                            firsthalf_profid=prof_id;
+                            prof_assignment[prof_id].push_back(cid);
+                            // cout << prof_id << "   " << cid << endl;
+                            prof_assignment[prof_id].erase(prof_assignment[prof_id].begin()+i);
+                            //not_assign_cid.erase(not_assign_cid.find(cid));  //ERASED RECENTLY
+                            amount_course_assigned=0.5;
+                            break;
+                        }
+                    }
+                }
+                if(amount_course_assigned==0.5) break;
+            }
+            
+        }
+        not_assign_cid.erase(not_assign_cid.find(cid));
+        if(amount_course_assigned==0) return -1;
+        else
+        {
+            not_assign_cid.insert(cid);
+            for (int  i = 0; i < master[cid].size(); i++)
+            {
+                int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
+
+                if(not_assign_pid.find(prof_id) == not_assign_pid.end()) //does not go into recursion for already rec ursed profs in not_assign_pid
+                {
+                    for (int  i = 0; i < prof_assignment[prof_id].size(); i++)
+                    {
+                        if(not_assign_cid.find(prof_assignment[prof_id][i]) == not_assign_cid.end())
+                        {
+                            not_assign_pid.insert(prof_id);
+                            int is_assigned = assign(prof_assignment[prof_id][i] ,0);
+                            not_assign_pid.erase(not_assign_pid.find(prof_id));
+                            if(is_assigned == 1)
+                            {
+                                prof_assignment[prof_id].push_back(cid);
+                                // cout << prof_id << "   " << cid << endl;
+                                prof_assignment[prof_id].erase(prof_assignment[prof_id].begin()+i);
+                                //not_assign_cid.erase(not_assign_cid.find(cid)); //ERASED RECENTLY
+                                amount_course_assigned=1;
+                                break;
+                            }
+                        }
+                    }
+                    if(amount_course_assigned==1) break;
+                }
+                
+            }
+            not_assign_cid.erase(not_assign_cid.find(cid));
+
+            if(amount_course_assigned==1) return 1;
+            else
+            {
+                prof_assignment[firsthalf_profid].erase(prof_assignment[firsthalf_profid].end()-1); //FOCUSPOINT  
+            }
+
+        }
+
+    }
+    return -1;
+         
+}
 
 int main()
 {
+
+
     // PART 1 : THE STORING OF INPUT FILES INTO MANY SMALL USEFUL PIECES
 
      // input from txt
@@ -21,7 +198,7 @@ int main()
     cin>> num_of_profs;
     cin >> ws; //skips first input line
 
-    map<int,double> prof_potential; // max courses can be taken by prof, first element prof id second potential
+    // declared as global map<int,double> prof_potential; // max courses can be taken by prof, first element prof id second potential
     map<int,string> prof_id; //this stores id of prof as key and stored prof name as value
     map<string,int> rev_prof_id; // this is used when i want to find id of a prof
     map<int,string> course_id; //init after the master input for loop 
@@ -265,10 +442,10 @@ int main()
         column_num++;
     }
 
-
-
-
-    
-
+    //PART 3- THE MATURING OF THE MAN ALGORITHM
+    for(auto pr: master)
+    {
+        assign(pr.first,1);
+    }
 
 }
