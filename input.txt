@@ -1,4 +1,8 @@
-3
-ProfA,1,2,a,c,2,d,e,1,g,2,h,i
-ProfB,1.5,2,b,c,2,d,f,1,g,2,h,i 
-ProfC,1.5,1,a,1,d,1,g,1,h
+7
+pC,0.5,0,0,1,fde1,0
+pD,1,0,0,1,fde1,1,hde1
+pB,1,0,1,hdc1,1,fde1,0
+pE,0.5,1,fdc1,1,hdc1,0,0
+pA,1,2,fdc1,fdc2,0,0,0
+pF,1,1,fdc1,0,0,0
+pG,1,1,fdc1,0,0,0

@@ -1,12 +1,19 @@
-ProfA is assigned the following:
-	1. Half a course of a
-	2. Half a course of c
+pC is assigned the following:
+	1. Half a course of fde1
 
-ProfB is assigned the following:
-	1. Full course of b
-	2. Half a course of c
+pD is assigned the following:
+	1. Full course of hde1
 
-ProfC is assigned the following:
-	1. Half a course of a
-	2. Full course of d
+pB is assigned the following:
+	1. Half a course of hdc1
+	2. Half a course of fde1
+
+pE is assigned the following:
+	1. Half a course of hdc1
+
+pA is assigned the following:
+	1. Full course of fdc2
+
+pF is assigned the following:
+	1. Full course of fdc1
 

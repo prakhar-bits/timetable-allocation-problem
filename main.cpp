@@ -9,9 +9,9 @@ set<int> not_assign_cid;
 
 
 //RECURSIVE SELF-CORRECTING ASSIGN FUNCTION
-int assign(int cid,int flag)
+int assign(int cid,int flag) //flag=0: 0.5 course to be given;  flag=1: 1 full course to be given
 {
-    int firsthalf_profid = -1;
+    int firsthalf_profid = -1; //to know which prof to remove if only half a course was alloted
 
     if (flag==0)
     { 
@@ -83,15 +83,20 @@ int assign(int cid,int flag)
                             prof_assignment[prof_id].push_back(cid);
                             // cout << prof_id << "   " << cid << endl;
                             prof_assignment[prof_id].erase(prof_assignment[prof_id].begin()+i);
-                            not_assign_cid.erase(not_assign_cid.find(cid));
+                            // not_assign_cid.erase(not_assign_cid.find(cid));
                             return 1;
+                        }
+                        else
+                        {
+                            not_assign_cid.insert(prof_assignment[prof_id][i]);
                         }
                     }
                 }
             }
             
         }
-        not_assign_cid.erase(not_assign_cid.find(cid));
+        
+        //not_assign_cid.erase(not_assign_cid.find(cid));
         if(firsthalf_profid!=-1)
         {
             prof_assignment[firsthalf_profid].erase(prof_assignment[firsthalf_profid].end()-1);
@@ -217,6 +222,7 @@ int main()
     vector<vector<string> > input ; 
     for (int  i = 0; i < num_of_profs ; i++)
     {
+
         string prof_name;
         double category;
         int fd_cdc,hd_cdc,fd_elec,hd_elec;
@@ -228,6 +234,17 @@ int main()
         string token;
         while (getline(tokenStream, token, ',')) { prof_deets.push_back(token); }
         ////
+        //removing leading and lagging space from each token
+        for(string &st: prof_deets)
+        {
+            size_t start = st.find_first_not_of(" \t\n\r\f\v");
+            if (start == string::npos) {
+                st = "";
+            } else {
+                size_t end = st.find_last_not_of(" \t\n\r\f\v");
+                st = st.substr(start, end - start + 1);
+            }
+        }
 
         input.push_back(prof_deets);
 
@@ -235,16 +252,18 @@ int main()
         rev_prof_id[prof_deets[0]] = i+1;
 
         prof_potential[i+1] = stod(prof_deets[1]);
-
+        
         for (int  i = 2; i < prof_deets.size(); i++)
         {
             int num_of_given_type_course = stoi(prof_deets[i]);
-            while(num_of_given_type_course--)
+            while(num_of_given_type_course!=0)
             {
                 i++;
                 courses.insert(prof_deets[i]);// inserting all the courses in courses set to help make id for courses
+                num_of_given_type_course--;
             }
-        }            
+        }           
+        prof_deets.clear();
     }
 
     
@@ -266,13 +285,13 @@ int main()
         {
             flag++;
             int num_of_given_type_course = stoi(input[i][j]);
-            while(num_of_given_type_course--)
+            while(num_of_given_type_course!=0)
             {
                 j++;
                 prof_courses[rev_prof_id[input[i][0]]].push_back(rev_course_id[input[i][j]]);
                 if(flag==1)
                 {//this just stores course ids of fd cdc of a particular prof(id)
-                    prof_fd_cdc[rev_prof_id[input[i][0]]].push_back(rev_course_id[input[i][j]]);
+                    prof_fd_cdc[rev_prof_id[input[i][0]]].push_back(rev_course_id[input[i][j]]);                   
                 }
                 else if(flag==2)
                 {
@@ -287,6 +306,7 @@ int main()
                 {//same as above
                     prof_hd_elec[rev_prof_id[input[i][0]]].push_back(rev_course_id[input[i][j]]);
                 }
+                num_of_given_type_course--;
             }
         }
         
@@ -448,10 +468,12 @@ int main()
     
     for(auto pr: master)
     {
+        not_assign_cid.clear();
         assign(pr.first,1);
     }
 
     //PART 4- I AM TOO TIRED TO THINK OF OMETHING
+
 
     ofstream outputFile("output.txt");
 
