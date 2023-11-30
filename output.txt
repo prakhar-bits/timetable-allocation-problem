@@ -1,0 +1,12 @@
+ProfA is assigned the following:
+	1. Half a course of a
+	2. Half a course of c
+
+ProfB is assigned the following:
+	1. Full course of b
+	2. Half a course of c
+
+ProfC is assigned the following:
+	1. Half a course of a
+	2. Full course of d
+

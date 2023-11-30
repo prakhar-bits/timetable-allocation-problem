@@ -7,6 +7,8 @@ set<int> not_assign_pid; //set of profs who cannot be assigned that particular c
 map<int,double> prof_potential; // max courses can be taken by prof, first element prof id second potential
 set<int> not_assign_cid;
 
+
+//RECURSIVE SELF-CORRECTING ASSIGN FUNCTION
 int assign(int cid,int flag)
 {
     int firsthalf_profid = -1;
@@ -15,7 +17,7 @@ int assign(int cid,int flag)
     { 
         for (int  i = 0; i < master[cid].size(); i++)
         {
-            int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
+             int prof_id = master[cid][i]; // prof_id of prof who can potentially take the course 
             if(prof_potential[prof_id] >=0.5 && not_assign_pid.find(prof_id) == not_assign_pid.end())
             {
                 prof_potential[prof_id] -=0.5;
@@ -443,9 +445,49 @@ int main()
     }
 
     //PART 3- THE MATURING OF THE MAN ALGORITHM
+    
     for(auto pr: master)
     {
         assign(pr.first,1);
     }
+
+    //PART 4- I AM TOO TIRED TO THINK OF OMETHING
+
+    ofstream outputFile("output.txt");
+
+    if (!outputFile) {
+        cerr << "Error opening the file for output." << endl;
+        return 1;
+    }
+    streambuf *orig_cout = cout.rdbuf(outputFile.rdbuf());
+
+    for(auto pr: prof_assignment)
+    {
+        map<int,int> assigned;
+        for (int  i = 0; i < pr.second.size() ; i++)
+        {
+            assigned[pr.second[i]]++;
+            
+        }
+        
+        cout << prof_id[pr.first] << " is assigned the following:" << endl;
+        int i=1;
+        for (auto it = assigned.begin(); it != assigned.end() ; it++)
+        {
+            if(it->second==1) cout<<"\t"<<i<<". Half a course of "<<course_id[rev_new_cid[it->first]]<<endl;
+            else cout<<"\t"<<i<<". Full course of "<<course_id[rev_new_cid[it->first]]<<endl;
+            i++;
+        }
+        cout<<endl; 
+    }
+
+
+
+
+    outputFile.close();
+    cout.rdbuf(orig_cout);
+
+    return 0;
+
 
 }
