@@ -2,6 +2,13 @@
 ## Link for the demo video - https://drive.google.com/file/d/1i3bq4pEK5dSLdGyqzypSjc4ZOCIrZk03/view <br />
 ### The code(main.cpp,input.txt,output.txt) has been provided with our test cases in input.txt(you are welcome to provide your own).
 
+### main.cpp - contains main code for the project
+### input.txt - contains the input file
+### output.txt - contains output file
+### report.tex - Report for project
+### crash_test.tex - Crash Report
+### Testcasesandoutput.pdf - Contains few testcases of our own
+
 The format of the input is as follows:<br />
 Number of professors<br />
 //(then for each professor )<br />
