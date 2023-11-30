@@ -1,0 +1,68 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm}
+\usepackage{caption}
+
+\usepackage{fullpage}
+\usepackage{subcaption} %Subfigure
+%\usepackage{subfigure} %Subfigure
+\usepackage{pifont}
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage{amssymb,amsbsy}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{amsmath}     
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{tcolorbox}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{varwidth}
+%\usepackage{authblk}
+\usepackage{algorithm}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{algorithmic}
+\usepackage{lmodern}
+\usepackage{natbib}
+\usepackage{mathtools}      
+\usepackage[titletoc]{appendix}
+%\usepackage{titlesec}       
+\usepackage{titletoc}
+\usepackage{ntheorem}
+
+%\graphicspath{{Images/}}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+\usepackage{amsmath}  
+\usepackage{float}
+\newfloat{algorithm}{t}{lop}
+\usepackage{lipsum}% http://ctan.org/pkg/lipsum
+\usepackage{tikz}   %allows shapes of nodes
+\usetikzlibrary{shapes,arrows}
+
+\usetikzlibrary{positioning, automata}
+\usepackage{makeidx}         % allows index generation
+ \usepackage{blkarray}% http://ctan.org/pkg/blkarray
+ \newcommand{\matindex}[1]{\mbox{\scriptsize#1}}% Matrix index
+ \usepackage{dcolumn}
+\newcolumntype{L}{D{.}{.}{1.1}}
+\usepackage{multirow}% http://ctan.org/pkg/multirow
+\usepackage{hhline}% http://ctan.org/pkg/hhline
+\usepackage{caption}
+%\captionsetup{labelsep=space,justification=justified,singlelinecheck=off}
+\usepackage{fancyhdr,graphicx,amsmath,amssymb}
+%\usepackage[ruled,vlined]{algorithm2e}
+
+\title{An Application of Graph Optimization-Course Project Crash Test Report}
+\author{Anwesh Das (2022A7PS1127G) , \\Prakhar Kumar Gupta (2022A7PS1145G) ,\\ Yash Agarwal (2022A7PS1104G)}
+\date{30 November 2022}
+\begin{document}
+\maketitle
+\section{Here are some potential limitations and areas for improvement in our algorithm and code:}
+\begin{itemize}
+\item By its design, our code only provides one of the possible optimal outputs. However, this can be addressed by altering the order of professors in cases of identical preferences or by changing the order of courses that hold the same priority for the University in the master map.
+\item Our code occasionally assigns professors of category x2 and x3 to fewer course loads than desired while maximizing the assignment of courses.
+\item A limitation of our algorithm is that it may struggle with handling a very large number of courses and professors due to its relatively high time complexity.
+\end{itemize}
+\end{document}

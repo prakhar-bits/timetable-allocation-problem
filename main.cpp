@@ -223,9 +223,7 @@ int main()
     for (int  i = 0; i < num_of_profs ; i++)
     {
 
-        string prof_name;
-        double category;
-        int fd_cdc,hd_cdc,fd_elec,hd_elec;
+       
         //// 
         string inputLine;
         getline(cin, inputLine);
@@ -482,6 +480,18 @@ int main()
         return 1;
     }
     streambuf *orig_cout = cout.rdbuf(outputFile.rdbuf());
+
+    cout<<"Courses:     Professors in order of priority:"<< endl;
+    for(auto pr : master)
+    {
+        cout<<course_id[rev_new_cid[pr.first]]<<"           ";
+        for (int  i = 0; i < pr.second.size() ; i++)
+        {
+            cout<<prof_id[pr.second[i]]<<" ";
+        }
+        cout<<endl;        
+    }
+    cout<<endl;
 
     for(auto pr: prof_assignment)
     {
